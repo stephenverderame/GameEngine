@@ -1,0 +1,10 @@
+﻿  Camera.cpp
+  Model.cpp
+c:\program files\assimp\include\assimp\material.inl(91): error C2589: '(': illegal token on right side of '::'
+  c:\program files\assimp\include\assimp\material.inl(91): note: This diagnostic occurred in the compiler generated function 'aiReturn aiMaterial::Get(const char *,unsigned int,unsigned int,Type *,unsigned int *) const'
+c:\users\stephen\source\repos\s game engine\s game engine\model.cpp(141): warning C4018: '<': signed/unsigned mismatch
+  Resources.cpp
+  Shader.cpp
+  Shape.cpp
+  Texture.cpp
+  Window.cpp
