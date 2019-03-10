@@ -25,5 +25,9 @@ public:
 	inline void setVec4(const char * name, glm::vec4 value) const { glUniform4f(glGetUniformLocation(program, name), value.x, value.y, value.z, value.w); }
 	inline void setMat3(const char * name, glm::mat3 value) const { glUniformMatrix3fv(glGetUniformLocation(program, name), 1, GL_FALSE, glm::value_ptr(value)); }
 	inline void setMat4(const char * name, glm::mat4 value) const { glUniformMatrix4fv(glGetUniformLocation(program, name), 1, GL_FALSE, glm::value_ptr(value)); }
+	inline void setFArray(const char * name, const float * data, size_t length) const { glUniform1fv(glGetUniformLocation(program, name), length, data); }
+	inline void setMArray(const char * name, const glm::mat4 * data, size_t length) const {
+		glUniformMatrix4fv(glGetUniformLocation(program, name), length, GL_FALSE, glm::value_ptr(data[0]));
+	}
 };
 

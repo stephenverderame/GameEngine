@@ -5,6 +5,7 @@ class Object
 protected:
 	glm::vec3 pos, scalers, rotationalAxis;
 	float angle;
+	float shininess;
 protected:
 	virtual glm::mat4 calcModel() const;
 	/**
@@ -21,6 +22,7 @@ public:
 	virtual void setPos(glm::vec3 pos);
 	virtual void scale(glm::vec3 factors);
 	virtual void rotate(float angle, glm::vec3 axis);
+	virtual void setShininess(float shinyFactor);
 	virtual glm::vec3 getPos() const;
 };
 

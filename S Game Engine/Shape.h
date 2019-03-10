@@ -2,6 +2,7 @@
 #include "Shader.h"
 #include "Object.h"
 #include "Texture.h"
+const glm::vec4 color_unset = { -1, -1, -1, -1 };
 class Shape : public Object
 {
 protected:
@@ -67,6 +68,19 @@ private:
 	};
 public:
 	Cube();
+	void draw(const Shader * s) const override;
+};
+class Rect : public Shape {
+private:
+	float rectData[32] = {
+		//positions				normals			texCoords
+		-0.5f,  0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  1.0f, 1.0f, // top left 
+		-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f, // bottom left	
+		0.5f,  0.5f, 0.0f,   0.0f, 1.0f, 0.0f,  0.0f, 1.0f, // top right
+		0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,  0.0f, 0.0f // bottom right			
+	};
+public:
+	Rect();
 	void draw(const Shader * s) const override;
 };
 

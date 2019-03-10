@@ -55,7 +55,7 @@ Texture::Texture(const Texture * r) : ref(r), type(ref->type), id(ref->id), text
 {
 }
 
-void Texture::bind()
+void Texture::bind() const
 {
 	glActiveTexture(GL_TEXTURE0 + id);
 	glBindTexture(GL_TEXTURE_2D, texture);

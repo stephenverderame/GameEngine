@@ -17,6 +17,8 @@ int Engine::pickShader(objData d)
 
 void Engine::render(const Scene & s)
 {
+	shaders[st_common]->use();
+	s.uploadLights(shaders[st_common]);
 	for (size_t i = 0; i < s.objectCount(); ++i) {
 		Shader * shader = shaders[pickShader(s.objectData(i))];
 		shader->use();
@@ -58,13 +60,17 @@ void Engine::view(const Camera & cam)
 	for (Shader * s : shaders) {
 		s->use();
 		s->setMat4("view", cam.getViewMatrix());
+		s->setVec3("viewPos", cam.getPos());
 	}
 }
 
 Engine::Engine()
 {
 	shaders[st_common] = new Shader(resources, COMMON_VERT, COMMON_FRAG);
+	shaders[st_model] = new Shader(resources, MODEL_VERT, MODEL_FRAG);
 	memset(perspectiveData, 0, sizeof(perspectiveData));
+	shaders[st_common]->setInt("texture_diffuse", DIFFUSE_TEX_ID);
+	shaders[st_common]->setInt("texture_specular", SPECULAR_TEX_ID);
 
 }
 

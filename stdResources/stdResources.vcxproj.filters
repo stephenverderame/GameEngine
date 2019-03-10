@@ -36,5 +36,11 @@
     <None Include="commonVert.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="modelVert.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="modelFrag.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

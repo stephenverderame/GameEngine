@@ -38,3 +38,8 @@ glm::vec3 Object::getPos() const
 {
 	return pos;
 }
+
+void Object::setShininess(float s) 
+{
+	shininess = s;
+}

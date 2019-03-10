@@ -33,8 +33,8 @@ public:
 	void setId(int i) const { id = i; }
 	int getId() const { return id; }
 	void setTextureType(textureType type) { this->type = type; }
-	textureType getTextureType() { return type; }
-	void bind();
+	textureType getTextureType() const { return type; }
+	void bind() const;
 	~Texture();
 };
 

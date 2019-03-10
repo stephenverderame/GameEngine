@@ -5,11 +5,13 @@
 #include "Scene.h"
 #include "Observer.h"
 #include "Camera.h"
+#define DIFFUSE_TEX_ID 0
+#define SPECULAR_TEX_ID 1
 class Engine : public Observer
 {
 private:
 	StdResources resources;
-	std::array<Shader *, 1> shaders;
+	std::array<Shader *, 2> shaders;
 	float perspectiveData[4];
 private:
 	int pickShader(objData d);

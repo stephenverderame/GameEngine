@@ -22,6 +22,7 @@ public:
 	operator glm::mat4() const;
 	glm::mat4 getViewMatrix() const;
 	void setPos(glm::vec3 pos) { shouldUpdate = true; this->pos = pos; }
+	glm::vec3 getPos() const { return pos; }
 	void setAngles(float yaw, float pitch) { shouldUpdate = true; this->yaw = yaw; this->pitch = pitch; }
 	float getYaw() const { return yaw; } 
 	float getPitch() const { return pitch; }

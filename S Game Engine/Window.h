@@ -2,6 +2,8 @@
 #include <glad\glad.h>
 #include <glfw3.h>
 #include "Observer.h"
+#define KEY_DOWN GLFW_PRESS
+#define KEY_UP GLFW_RELEASE
 enum events {
 	ev_changeSize
 };

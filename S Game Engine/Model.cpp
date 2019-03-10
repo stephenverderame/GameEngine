@@ -61,10 +61,14 @@ std::vector<Texture*> Model::loadMaterialTexture(void * material, int type, cons
 	for (unsigned int i = 0; i < mat->GetTextureCount(t); ++i) {
 		aiString str;
 		mat->GetTexture(t, i, &str);
+		std::string filename = str.C_Str();
+		if(filename.find('\\') != filename.npos)
+			filename = filename.substr(filename.find_last_of('\\'));
+		std::string texPath = texDirectory + '\\' + filename;
 		Texture * tex;
 		auto it = std::find(loadedTextures.begin(), loadedTextures.end(), str.C_Str());
 		if (it == loadedTextures.end()) {
-			tex = new Texture(str.C_Str());
+			tex = new Texture(texPath.c_str());
 			textureType tt;
 			switch (t) {
 			case aiTextureType_SPECULAR:
@@ -90,10 +94,16 @@ std::vector<Texture*> Model::loadMaterialTexture(void * material, int type, cons
 	return textures;
 }
 
-Model::Model(const char * path)
+Model::Model(const char * path, const char * texDirectory)
 {
+	if (texDirectory != nullptr)
+		this->texDirectory = texDirectory;
+	else {
+		std::string pr = path;
+		this->texDirectory = pr.substr(0, pr.find_last_of('\\'));
+	}
 	Assimp::Importer importer;
-	const aiScene * scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals);
+	const aiScene * scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals);
 	loadModel(scene);
 }
 
@@ -101,22 +111,29 @@ Model::Model(int resourceId, int resourceType)
 {
 	Resources res(resourceId, resourceType);
 	Assimp::Importer importer;
-	const aiScene * scene = importer.ReadFileFromMemory(res.data, res.length, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals);
+	const aiScene * scene = importer.ReadFileFromMemory(res.data, res.length, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals);
 	loadModel(scene);
 }
 
 
 Model::~Model()
 {
+	for (Mesh * m : meshes)
+		delete m;
 }
 
 void Model::draw(const Shader * s) const
 {
+	//Shader is used in Engine code
+	s->setMat4("model", calcModel());
+	s->setFloat("shininess", shininess);
+	s->setBool("useSpecMap", true);
 	for (Mesh * m : meshes)
 		m->draw(s);
+	s->setBool("useSpecMap", false);
 }
 
-Mesh::Mesh(std::vector<vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures) : vertices(vertices), indices(indices), textures(textures)
+Mesh::Mesh(std::vector<vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures) : indices(indices), textures(textures)
 {
 	glGenVertexArrays(1, &vao);
 	glGenBuffers(1, &vbo);
@@ -141,20 +158,27 @@ void Mesh::draw(const Shader * s) const
 	for (int i = 0; i < textures.size(); ++i) {
 		std::string type;
 		int count;
+		int id = 0;
+		bool unimplemented = false;
 		switch (textures[i]->getTextureType()) {
 		case textureType::specular:
 			type = "specular";
 			count = specCount++;
+			id = 1;
 			break;
-		default:
+		case textureType::diffuse:
 			type = "diffuse";
+			id = 0;
 			count = diffCount++;
 			break;
+		default:
+			unimplemented = true;
 		}
+		if (unimplemented) continue;
 		std::stringstream uniform;
-		uniform << "texture_" << type << count;
-		s->setInt(uniform.str().c_str(), i);
-		textures[i]->setId(i);
+		uniform << "texture_" << type; // << count;
+//		s->setInt(uniform.str().c_str(), i);
+		textures[i]->setId(id);
 		textures[i]->bind();
 	}
 	glBindVertexArray(vao);

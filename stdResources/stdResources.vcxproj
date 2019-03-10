@@ -126,6 +126,8 @@
   <ItemGroup>
     <None Include="commonFrag.glsl" />
     <None Include="commonVert.glsl" />
+    <None Include="modelFrag.glsl" />
+    <None Include="modelVert.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,7 +1,7 @@
 #pragma once
 #include "Object.h"
 #include "Model.h"
-#include <initializer_list>
+#include "AnimModel.h"
 //used to select which shader to use
 enum class objectType {
 	simple,
@@ -9,6 +9,13 @@ enum class objectType {
 };
 struct objData {
 	objectType type;
+};
+struct pointLight {
+	glm::vec3 position;
+	glm::vec3 diffuse;
+	float ambientFactor;
+	float specularFactor;
+	float range;
 };
 struct s_impl;
 class Scene
@@ -31,11 +38,13 @@ public:
 	* @see addObj(Object *, const char *)
 	* @see objData
 	*/
-	void addObj(Model * m, const char * name);
+	void addObj(AnimModel * m, const char * name);
 	Object * operator[](const char * name) const;
 	void draw(const Shader * s, size_t i) const;
 	size_t objectCount() const;
 	objData objectData(size_t i) const;
+	void addLight(pointLight * light);
+	void uploadLights(Shader * s) const;
 	Scene();
 	~Scene();
 };
