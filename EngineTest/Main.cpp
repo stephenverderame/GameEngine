@@ -4,15 +4,25 @@
 #include <stdio.h>
 #include <Shape.h>
 #include <Engine.h>
+#include <UserInput.h>
 int main() {
 	Window wind(1000, 800, "Engine Demo"); 
 	wind.antialiasing(8);
 	wind.createWindow();
+	wind.captureCursor();
+	glEnable(GL_BLEND);
 	Resources res(T_1, TEST); 
 	printf("%s\n", res.data);
 
 	Camera cam(glm::vec3(0, 0, -1));
-	cam.setTarget(glm::vec3(0));
+//	cam.setTarget(glm::vec3(0));
+	UserInput input;
+	wind.attatch(&input);
+	input.setCamera(&cam);
+	input.standardMovement(true);
+	input.addKeyBind(keys::esc, [&wind](actions a, keys k) {
+		wind.releaseCursor();
+	});
 	Cube box;
 	Texture tex(BRICK_TEX, TEXTURE);
 	box.setPos(glm::vec3(1, 0, 2));
@@ -28,11 +38,16 @@ int main() {
 	for (size_t i = 0; i < guy2.animationSize(); ++i)
 		printf("%s\n", guy2.fetchAnim(i)->getName().c_str());
 	Rect rect;
-	rect.setColor(glm::vec4(1, 0, 0, 1));
+	rect.setColor(glm::vec4(1, 0, 0, 0.5));
 	rect.rotate(glm::radians(-45.f), glm::vec3(0, 1, 0));
 	rect.setPos(glm::vec3(-0.2, 0, 0.2));
 	rect.scale(glm::vec3(0.5));
 	rect.setShininess(128);
+	Rect floor;
+	floor.setTexture(&tex);
+	floor.rotate(glm::radians(90.f), glm::vec3(1, 0, 0));
+	floor.setPos(glm::vec3(0, -0.3, 0));
+	floor.setShininess(8);
 	guy2.setPos(glm::vec3(-1, -0.1, 5));
 	guy2.scale(glm::vec3(0.1));
 	guy.setPos(glm::vec3(0, -.5, 0));
@@ -41,13 +56,20 @@ int main() {
 	scene.ADD_OBJ(guy);
 	scene.ADD_OBJ(box);
 	scene.ADD_OBJ(rect);
-	pointLight p = { glm::vec3(0.3, 0, 0.3), glm::vec3(0.5, 0, 0.25), 0.2, 1.0, 1.0 };
+	scene.ADD_OBJ(floor);
+	pointLight p(glm::vec3(0.3, 0, 0.3), glm::vec3(0.5, 0, 0.25), 0.2, 1.0, 1.0);
+	spotLight s(glm::vec3(0, 3, 0), glm::vec3(0.5, 0, 0.5), glm::vec3(0, 0, 1), glm::radians(12.5), glm::radians(15.f), 1.0);
+	dirLight d(glm::vec3(1, 5, 0), glm::vec3(0), glm::vec3(0.5), 0.3, 1.0);
 	scene.addLight(&p);
+	scene.addLight(&s);
+	scene.addLight(&d);
 	while (!wind.windowShouldClose()) {
 		wind.clear();
-		glClearColor(0.f, 0.f, 0.f, 1.0f);
+//		glClearColor(0.f, .75f, 1.f, 1.0f);
+		glClearColor(0.f, 0.f, 0.f, 1.f);
 		box.rotate(glfwGetTime(), glm::vec3(0, 1, 0));
 		guy.rotate(glfwGetTime(), glm::vec3(0, 1, 0));
+		engine.view(cam);
 		engine.render(scene);
 		wind.pollEvents();
 		wind.swapBuffers();

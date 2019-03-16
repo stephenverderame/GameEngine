@@ -36,6 +36,10 @@ Mesh * Model::processMesh(void * ai_mesh, const void * _scene)
 			v.texCoord = glm::vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
 		else
 			v.texCoord = glm::vec2(0.f);
+		if (mesh->mTangents)
+			v.tangent = glm::vec3(mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z);
+		else
+			v.tangent = glm::vec3(0.f);
 		vertices.push_back(v);
 	}
 	for (unsigned int i = 0; i < mesh->mNumFaces; ++i) {
@@ -103,7 +107,7 @@ Model::Model(const char * path, const char * texDirectory)
 		this->texDirectory = pr.substr(0, pr.find_last_of('\\'));
 	}
 	Assimp::Importer importer;
-	const aiScene * scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals);
+	const aiScene * scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
 	loadModel(scene);
 }
 
@@ -111,7 +115,7 @@ Model::Model(int resourceId, int resourceType)
 {
 	Resources res(resourceId, resourceType);
 	Assimp::Importer importer;
-	const aiScene * scene = importer.ReadFileFromMemory(res.data, res.length, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals);
+	const aiScene * scene = importer.ReadFileFromMemory(res.data, res.length, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
 	loadModel(scene);
 }
 
@@ -149,12 +153,14 @@ Mesh::Mesh(std::vector<vertex> vertices, std::vector<unsigned int> indices, std:
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof(vertex, texCoord));
 	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof(vertex, tangent));
+	glEnableVertexAttribArray(3);
 
 }
 
 void Mesh::draw(const Shader * s) const
 {
-	int diffCount = 0, specCount = 0;
+	int diffCount = 0, specCount = 0, normCount = 0;
 	for (int i = 0; i < textures.size(); ++i) {
 		std::string type;
 		int count;
@@ -171,6 +177,11 @@ void Mesh::draw(const Shader * s) const
 			id = 0;
 			count = diffCount++;
 			break;
+		case textureType::normal:
+			type = "normal";
+			id = 2;
+			count = normCount++;
+			break;
 		default:
 			unimplemented = true;
 		}
@@ -181,8 +192,10 @@ void Mesh::draw(const Shader * s) const
 		textures[i]->setId(id);
 		textures[i]->bind();
 	}
+	if (normCount) s->setBool("useNormalMap", true);
 	glBindVertexArray(vao);
 	glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, 0);
+	if (normCount) s->setBool("useNormalMap", false);
 
 }
 

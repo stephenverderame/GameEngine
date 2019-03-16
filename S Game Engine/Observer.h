@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 class Observer
 {
 public:
@@ -6,7 +7,7 @@ public:
 };
 class Subject {
 protected:
-	Observer * observer;
+	std::vector<Observer *> observers;
 public:
 	void notify(int msg, void * data);
 	void attatch(Observer * o);

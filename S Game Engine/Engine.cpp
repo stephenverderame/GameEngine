@@ -71,6 +71,7 @@ Engine::Engine()
 	memset(perspectiveData, 0, sizeof(perspectiveData));
 	shaders[st_common]->setInt("texture_diffuse", DIFFUSE_TEX_ID);
 	shaders[st_common]->setInt("texture_specular", SPECULAR_TEX_ID);
+	shaders[st_common]->setInt("texture_normal", NORMAL_TEX_ID);
 
 }
 

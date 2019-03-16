@@ -2,10 +2,13 @@
 
 void Subject::notify(int msg, void * data)
 {
-	observer->update(msg, data);
+	for (auto it : observers) {
+		it->update(msg, data);
+	}
 }
 
 void Subject::attatch(Observer * o)
 {
-	observer = o;
+	observers.push_back(o);
 }
+

@@ -76,6 +76,7 @@ void Rect::draw(const Shader * s) const
 	s->setFloat("shininess", shininess);
 	glBindVertexArray(vao);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+//	glDrawArrays(GL_TRIANGLES, 0, 6);
 	if (tex == nullptr)
 		s->setVec4("color", color_unset);
 }

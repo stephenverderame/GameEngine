@@ -7,15 +7,22 @@ Window * Window::wind = nullptr;
 void Window::changeSizeCallback(GLFWwindow * window, int width, int height)
 {
 	glViewport(0, 0, width, height);
-	int data[2];
-	data[0] = width;
-	data[1] = height;
+	int data[2] = { width, height };
 	wind->notify(ev_changeSize, data);
 }
 
 void Window::mouseMoveCallback(GLFWwindow * window, double x, double y)
 {
 	Mouse::setPos(x, y);
+	double data[2] = { x, y };
+	wind->notify(ev_mouseMove, data);
+}
+
+void Window::keyCallback(GLFWwindow * window, int key, int scancode, int action, int mods)
+{
+	int data[4] = { key, action, scancode, mods };
+	wind->notify(ev_keyPress, data);
+	GLFW_KEY_ESCAPE;
 }
 
 Window::Window(int width, int height, const char * name) : width(width), height(height), name((char*)name), aa(false)
@@ -47,6 +54,16 @@ void Window::antialiasing(int x)
 	aa = true;
 }
 
+void Window::captureCursor()
+{
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+}
+
+void Window::releaseCursor()
+{
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
+
 void Window::createWindow()
 {
 	window = glfwCreateWindow(width, height, name, NULL, NULL);
@@ -55,6 +72,7 @@ void Window::createWindow()
 
 	glfwSetFramebufferSizeCallback(window, changeSizeCallback);
 	glfwSetCursorPosCallback(window, mouseMoveCallback);
+	glfwSetKeyCallback(window, keyCallback);
 	if (aa)
 		glEnable(GL_MULTISAMPLE);
 	glViewport(0, 0, width, height);

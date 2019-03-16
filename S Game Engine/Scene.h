@@ -10,12 +10,42 @@ enum class objectType {
 struct objData {
 	objectType type;
 };
-struct pointLight {
+enum class lightType {
+	point,
+	spot,
+	directional
+};
+struct light {
+	lightType type;
+};
+struct pointLight : public light {
 	glm::vec3 position;
 	glm::vec3 diffuse;
 	float ambientFactor;
 	float specularFactor;
 	float range;
+	pointLight() { type = lightType::point; }
+	pointLight(glm::vec3 pos, glm::vec3 color, float ambient, float spec, float range) : position(pos), diffuse(color), ambientFactor(ambient),
+		specularFactor(spec), range(range) { type = lightType::point; }
+
+};
+struct spotLight : public light {
+	glm::vec3 position;
+	glm::vec3 direction;
+	glm::vec3 color;
+	float cutoff, outerCutoff, range;
+	spotLight() { type = lightType::spot; }
+	spotLight(glm::vec3 pos, glm::vec3 dir, glm::vec3 color, float cutoff, float outerCutoff, float range)  : position(pos), direction(dir), color(color), cutoff(cutoff),
+		outerCutoff(outerCutoff), range(range)
+	{ type = lightType::spot; }
+};
+struct dirLight : public light {
+	glm::vec3 direction;
+	glm::vec3 color;
+	float ambientFactor, specularFactor;
+	dirLight() { type = lightType::directional; }
+	dirLight(glm::vec3 position, glm::vec3 target, glm::vec3 color, float ambientFactor, float specularFactor) : direction(position - target), color(color), ambientFactor(ambientFactor),
+		specularFactor(specularFactor) { type = lightType::directional; }
 };
 struct s_impl;
 class Scene
@@ -43,11 +73,10 @@ public:
 	void draw(const Shader * s, size_t i) const;
 	size_t objectCount() const;
 	objData objectData(size_t i) const;
-	void addLight(pointLight * light);
+	void addLight(light * light);
 	void uploadLights(Shader * s) const;
 	Scene();
 	~Scene();
 };
 #define ADD_OBJ(OBJ) addObj(&OBJ, #OBJ)
-#define GET_OBJ(OBJ) [#OBJ]
 

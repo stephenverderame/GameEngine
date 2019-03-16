@@ -3,7 +3,7 @@
 #include "Texture.h"
 #include <vector>
 struct vertex {
-	glm::vec3 pos, normal;
+	glm::vec3 pos, normal, tangent;
 	glm::vec2 texCoord;
 };
 class Mesh {

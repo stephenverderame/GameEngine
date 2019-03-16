@@ -1,6 +1,7 @@
 #pragma once
 #include <glm.hpp>
 #include <gtc\matrix_transform.hpp>
+glm::vec3 operator*(const glm::vec3 & a, float scaler);
 class Camera
 {
 private:
@@ -26,6 +27,8 @@ public:
 	void setAngles(float yaw, float pitch) { shouldUpdate = true; this->yaw = yaw; this->pitch = pitch; }
 	float getYaw() const { return yaw; } 
 	float getPitch() const { return pitch; }
+	glm::vec3 getFront() const { return front; }
+	glm::vec3 getRight() const { return right; }
 	~Camera();
 };
 

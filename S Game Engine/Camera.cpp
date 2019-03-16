@@ -1,6 +1,12 @@
 #include "Camera.h"
 
-
+glm::vec3 operator*(const glm::vec3 & a, float scaler) {
+	glm::vec3 result = a;
+	result.x *= scaler;
+	result.y *= scaler;
+	result.z *= scaler;
+	return result;
+}
 void Camera::setTarget(glm::vec3 target)
 {
 	thirdPerson = true;

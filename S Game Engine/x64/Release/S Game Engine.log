@@ -1,7 +1,9 @@
-﻿  Scene.cpp
-c:\users\stephen\source\repos\s game engine\s game engine\shader.h(28): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-c:\users\stephen\source\repos\s game engine\s game engine\shader.h(30): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-c:\users\stephen\source\repos\s game engine\s game engine\scene.cpp(37): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+﻿  UserInput.cpp
+c:\users\stephen\source\repos\s game engine\s game engine\userinput.cpp(35): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\stephen\source\repos\s game engine\s game engine\userinput.cpp(38): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\stephen\source\repos\s game engine\s game engine\userinput.cpp(41): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\stephen\source\repos\s game engine\s game engine\userinput.cpp(44): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\stephen\source\repos\s game engine\s game engine\userinput.cpp(78): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 assimp-vc140-mt.lib(assimp-vc140-mt.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR already defined in opengl32.lib(OPENGL32.dll); second definition ignored
 Model.obj : warning LNK4006: "public: unsigned int __cdecl aiMaterial::GetTextureCount(enum aiTextureType)const " (?GetTextureCount@aiMaterial@@QEBAIW4aiTextureType@@@Z) already defined in assimp-vc140-mt.lib(assimp-vc140-mt.dll); second definition ignored
 Model.obj : warning LNK4006: "public: enum aiReturn __cdecl aiMaterial::GetTexture(enum aiTextureType,unsigned int,struct aiString *,enum aiTextureMapping *,unsigned int *,float *,enum aiTextureOp *,enum aiTextureMapMode *)const " (?GetTexture@aiMaterial@@QEBA?AW4aiReturn@@W4aiTextureType@@IPEAUaiString@@PEAW4aiTextureMapping@@PEAIPEAMPEAW4aiTextureOp@@PEAW4aiTextureMapMode@@@Z) already defined in assimp-vc140-mt.lib(assimp-vc140-mt.dll); second definition ignored

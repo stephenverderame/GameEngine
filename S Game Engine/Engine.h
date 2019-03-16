@@ -7,6 +7,7 @@
 #include "Camera.h"
 #define DIFFUSE_TEX_ID 0
 #define SPECULAR_TEX_ID 1
+#define NORMAL_TEX_ID 2
 class Engine : public Observer
 {
 private:

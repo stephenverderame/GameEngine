@@ -5,7 +5,9 @@
 #define KEY_DOWN GLFW_PRESS
 #define KEY_UP GLFW_RELEASE
 enum events {
-	ev_changeSize
+	ev_changeSize,
+	ev_mouseMove,
+	ev_keyPress
 };
 class Mouse {
 private:
@@ -35,6 +37,8 @@ public:
 	* Do not manually call
 	*/
 	static void mouseMoveCallback(GLFWwindow * window, double x, double y);
+
+	static void keyCallback(GLFWwindow * window, int key, int scancode, int action, int mods);
 public:
 	Window(int width, int height, const char * name);
 	~Window();
@@ -45,6 +49,15 @@ public:
 	* @param x, the number of antialiasing samples
 	*/
 	void antialiasing(int x);
+	/**
+	* Hides cursor
+	* Window must already be created
+	*/
+	void captureCursor();
+	/**
+	* Shows cursor
+	*/
+	void releaseCursor();
 	void createWindow();
 	void setMouseButtonCallback(GLFWmousebuttonfun call);
 	void pollEvents() { glfwPollEvents(); }
