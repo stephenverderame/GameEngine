@@ -36,5 +36,10 @@ public:
 	textureType getTextureType() const { return type; }
 	void bind() const;
 	~Texture();
+public:
+	//* stbi_load
+	static unsigned char * load(const char * path, int * width, int * height, int * channels);
+	//* stbi_load_from_memory
+	static unsigned char * load(const unsigned char * data, int length, int * width, int * height, int * channels);
 };
 

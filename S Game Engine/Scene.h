@@ -2,6 +2,7 @@
 #include "Object.h"
 #include "Model.h"
 #include "AnimModel.h"
+#include "Skybox.h"
 //used to select which shader to use
 enum class objectType {
 	simple,
@@ -75,6 +76,8 @@ public:
 	objData objectData(size_t i) const;
 	void addLight(light * light);
 	void uploadLights(Shader * s) const;
+	void addSkybox(Skybox * s);
+	void drawSkybox(const Shader * s) const;
 	Scene();
 	~Scene();
 };

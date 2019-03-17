@@ -42,5 +42,11 @@
     <None Include="modelFrag.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="skyVert.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="skyFrag.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

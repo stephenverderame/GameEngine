@@ -70,7 +70,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Program Files\Assimp\include;C:\Users\stephen\Desktop\coding stuff\glm-0.9.8.4\glm;C:\Users\stephen\Desktop\coding stuff\Glad\include;C:\Users\stephen\Desktop\coding stuff\glfw-3.2.1.bin.WIN64\include\GLFW;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\stephen\source\repos\S Game Engine;C:\Program Files\Assimp\include;C:\Users\stephen\Desktop\coding stuff\glm-0.9.8.4\glm;C:\Users\stephen\Desktop\coding stuff\Glad\include;C:\Users\stephen\Desktop\coding stuff\glfw-3.2.1.bin.WIN64\include\GLFW;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\stephen\Desktop\coding stuff\assimp-master\assimp-master\build\code\Release;C:\Users\stephen\Desktop\coding stuff\glfw-3.2.1.bin.WIN64\lib-vc2015;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -150,6 +150,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Shape.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Timer.h" />
@@ -168,6 +169,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="UserInput.cpp" />

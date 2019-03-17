@@ -8,11 +8,12 @@
 #define DIFFUSE_TEX_ID 0
 #define SPECULAR_TEX_ID 1
 #define NORMAL_TEX_ID 2
+
 class Engine : public Observer
 {
 private:
 	StdResources resources;
-	std::array<Shader *, 2> shaders;
+	std::array<Shader *, STD_SHADER_COUNT> shaders;
 	float perspectiveData[4];
 private:
 	int pickShader(objData d);

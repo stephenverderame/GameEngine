@@ -66,3 +66,9 @@ Texture::~Texture()
 	if(ref == nullptr)
 		glDeleteTextures(1, &texture);
 }
+unsigned char * Texture::load(const char * path, int * width, int * height, int * channels) {
+	return stbi_load(path, width, height, channels, 0);
+}
+unsigned char * Texture::load(const unsigned char * data, int length, int * width, int * height, int * channels) {
+	return stbi_load_from_memory(data, length, width, height, channels, 0);
+}

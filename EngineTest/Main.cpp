@@ -21,7 +21,7 @@ int main() {
 	input.setCamera(&cam);
 	input.standardMovement(true);
 	input.addKeyBind(keys::esc, [&wind](actions a, keys k) {
-		wind.releaseCursor();
+		if(a == actions::press) wind.releaseCursor();
 	});
 	Cube box;
 	Texture tex(BRICK_TEX, TEXTURE);
@@ -63,6 +63,8 @@ int main() {
 	scene.addLight(&p);
 	scene.addLight(&s);
 	scene.addLight(&d);
+	Skybox sky("C:\\Users\\stephen\\Downloads\\envmap_interstellar\\interstellar.tga");
+	scene.addSkybox(&sky);
 	while (!wind.windowShouldClose()) {
 		wind.clear();
 //		glClearColor(0.f, .75f, 1.f, 1.0f);

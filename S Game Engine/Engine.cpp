@@ -2,7 +2,8 @@
 
 enum shader_types {
 	st_common,
-	st_model
+	st_model,
+	st_skybox
 };
 
 int Engine::pickShader(objData d)
@@ -19,6 +20,7 @@ void Engine::render(const Scene & s)
 {
 	shaders[st_common]->use();
 	s.uploadLights(shaders[st_common]);
+	s.drawSkybox(shaders[st_skybox]);
 	for (size_t i = 0; i < s.objectCount(); ++i) {
 		Shader * shader = shaders[pickShader(s.objectData(i))];
 		shader->use();
@@ -57,9 +59,13 @@ void Engine::perspective(float fov, float aspectRatio, float near_plane, float f
 
 void Engine::view(const Camera & cam)
 {
-	for (Shader * s : shaders) {
+	for (int i = 0; i < shaders.size(); ++i) {
+		Shader * s = shaders[i];
 		s->use();
-		s->setMat4("view", cam.getViewMatrix());
+		if (i == st_skybox)
+			s->setMat4("view", glm::mat4(glm::mat3(cam.getViewMatrix())));
+		else
+			s->setMat4("view", cam.getViewMatrix());
 		s->setVec3("viewPos", cam.getPos());
 	}
 }
@@ -68,10 +74,14 @@ Engine::Engine()
 {
 	shaders[st_common] = new Shader(resources, COMMON_VERT, COMMON_FRAG);
 	shaders[st_model] = new Shader(resources, MODEL_VERT, MODEL_FRAG);
+	shaders[st_skybox] = new Shader(resources, SKY_VERT, SKY_FRAG);
 	memset(perspectiveData, 0, sizeof(perspectiveData));
+	shaders[st_common]->use();
 	shaders[st_common]->setInt("texture_diffuse", DIFFUSE_TEX_ID);
 	shaders[st_common]->setInt("texture_specular", SPECULAR_TEX_ID);
 	shaders[st_common]->setInt("texture_normal", NORMAL_TEX_ID);
+	shaders[st_skybox]->use();
+	shaders[st_skybox]->setInt("texture_skybox", 0);
 
 }
 
@@ -81,3 +91,4 @@ Engine::~Engine()
 	for (Shader * s : shaders)
 		delete s;
 }
+

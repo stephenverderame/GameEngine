@@ -22,7 +22,7 @@ public:
 };
 class Cube : public Shape {
 private:
-	float cubeData[288] = {
+	const float cubeData[288] = {
 		//position				//normals			//texture coords
 		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 		0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
@@ -72,7 +72,7 @@ public:
 };
 class Rect : public Shape {
 private:
-	float rectData[32] = {
+	const float rectData[32] = {
 		//positions				normals			texCoords
 		-0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  1.0f, 1.0f, // top left 
 		-0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  1.0f, 0.0f, // bottom left	

@@ -12,6 +12,7 @@ struct s_impl {
 	std::vector<pointLight *> pointLights;
 	std::vector<spotLight *> spotLights;
 	dirLight * directionalLight;
+	Skybox * skybox;
 };
 
 
@@ -97,9 +98,20 @@ Scene::Scene()
 {
 	pimpl = std::make_unique<s_impl>();
 	pimpl->directionalLight = nullptr;
+	pimpl->skybox = nullptr;
 }
 
 
 Scene::~Scene()
 {
+}
+
+void Scene::addSkybox(Skybox * s) {
+	pimpl->skybox = s;
+}
+
+void Scene::drawSkybox(const Shader * s) const {
+	s->use();
+	if (pimpl->skybox != nullptr)
+		pimpl->skybox->draw();
 }

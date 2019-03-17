@@ -70,7 +70,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Program Files\Assimp\include;C:\Users\stephen\Desktop\coding stuff\glm-0.9.8.4\glm;C:\Users\stephen\Desktop\coding stuff\Glad\include;C:\Users\stephen\Desktop\coding stuff\glfw-3.2.1.bin.WIN64\include\GLFW;C:\Users\stephen\source\repos\S Game Engine\S Game Engine;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\stephen\source\repos\S Game Engine;C:\Program Files\Assimp\include;C:\Users\stephen\Desktop\coding stuff\glm-0.9.8.4\glm;C:\Users\stephen\Desktop\coding stuff\Glad\include;C:\Users\stephen\Desktop\coding stuff\glfw-3.2.1.bin.WIN64\include\GLFW;C:\Users\stephen\source\repos\S Game Engine\S Game Engine;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\stephen\source\repos\S Game Engine\x64\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
