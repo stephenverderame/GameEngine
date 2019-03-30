@@ -4,6 +4,8 @@
 #include "Observer.h"
 #define KEY_DOWN GLFW_PRESS
 #define KEY_UP GLFW_RELEASE
+#define KEY_HOLD GLFW_REPEAT
+constexpr WORD GLVersionNumber(int major, int minor) { return MAKEWORD(major, minor); }
 enum events {
 	ev_changeSize,
 	ev_mouseMove,
@@ -40,7 +42,7 @@ public:
 
 	static void keyCallback(GLFWwindow * window, int key, int scancode, int action, int mods);
 public:
-	Window(int width, int height, const char * name);
+	Window(int width, int height, const char * name, WORD version = MAKEWORD(3, 3));
 	~Window();
 	void fullscreen(int screen_width, int screen_height);
 

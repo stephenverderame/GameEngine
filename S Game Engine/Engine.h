@@ -31,5 +31,7 @@ public:
 	void view(const Camera & cam);
 	Engine();
 	~Engine();
+public:
+	static glm::mat4 makeTransformation(glm::vec3 pos, float scale = 1.f, float rotation = 0.f, glm::vec3 rotationAxis = { 0, 1, 0 });
 };
 

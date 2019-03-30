@@ -126,6 +126,7 @@
   <ItemGroup>
     <None Include="commonFrag.glsl" />
     <None Include="commonVert.glsl" />
+    <None Include="instanceVert.glsl" />
     <None Include="modelFrag.glsl" />
     <None Include="modelVert.glsl" />
     <None Include="skyFrag.glsl" />

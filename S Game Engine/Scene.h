@@ -10,6 +10,7 @@ enum class objectType {
 };
 struct objData {
 	objectType type;
+	bool instance;
 };
 enum class lightType {
 	point,
@@ -41,11 +42,11 @@ struct spotLight : public light {
 	{ type = lightType::spot; }
 };
 struct dirLight : public light {
-	glm::vec3 direction;
+	glm::vec3 position;
 	glm::vec3 color;
 	float ambientFactor, specularFactor;
 	dirLight() { type = lightType::directional; }
-	dirLight(glm::vec3 position, glm::vec3 target, glm::vec3 color, float ambientFactor, float specularFactor) : direction(position - target), color(color), ambientFactor(ambientFactor),
+	dirLight(glm::vec3 position, glm::vec3 color, float ambientFactor, float specularFactor) : position(position), color(color), ambientFactor(ambientFactor),
 		specularFactor(specularFactor) { type = lightType::directional; }
 };
 struct s_impl;

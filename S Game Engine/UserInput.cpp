@@ -29,7 +29,7 @@ void UserInput::update(int msg, void * data) {
 		if (impl->keyMaps.find((keys)info[0]) != impl->keyMaps.end()) {
 			impl->keyMaps[(keys)info[0]]((actions)info[1], (keys)info[0]);
 		}
-		if (stdMovement && cam != nullptr) {
+		if (stdMovement && cam != nullptr && isKeyDown(info[1])) {
 			switch ((keys)info[0]) {
 			case keys::a:
 				cam->setPos(cam->getPos() - cam->getRight() * speed);

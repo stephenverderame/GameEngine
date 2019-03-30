@@ -25,7 +25,7 @@ void Window::keyCallback(GLFWwindow * window, int key, int scancode, int action,
 	GLFW_KEY_ESCAPE;
 }
 
-Window::Window(int width, int height, const char * name) : width(width), height(height), name((char*)name), aa(false)
+Window::Window(int width, int height, const char * name, WORD version) : width(width), height(height), name((char*)name), aa(false)
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);

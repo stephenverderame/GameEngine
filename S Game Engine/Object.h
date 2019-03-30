@@ -6,14 +6,11 @@ protected:
 	glm::vec3 pos, scalers, rotationalAxis;
 	float angle;
 	float shininess;
+	bool instanced;
 protected:
 	virtual glm::mat4 calcModel() const;
-	/**
-	* Initializes object data to their 'null' values
-	* Should be called in constructor of subclass of Object
-	*/
-	void obj_init();
 public:
+	Object();
 	/**
 	* @param s, pass the address of or pointer to a Shader. Object does not take ownership of the Shader
 	*/
@@ -24,5 +21,7 @@ public:
 	virtual void rotate(float angle, glm::vec3 axis);
 	virtual void setShininess(float shinyFactor);
 	virtual glm::vec3 getPos() const;
+	bool instancingEnabled() const { return instanced; }
+
 };
 

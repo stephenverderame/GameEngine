@@ -48,5 +48,8 @@
     <None Include="skyFrag.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="instanceVert.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -14,8 +14,10 @@ enum class keys {
 	lShift = 340, lCtrl, lAlt, rShift = 344, rCtrl, rAlt
 };
 enum class actions {
-	release, press
+	release, press, repeat
 };
+constexpr bool isKeyDown(actions a) { return a != actions::release; }
+constexpr bool isKeyDown(int action) { return action >= 0 && action < 3 && action != (int)actions::release; }
 struct u_impl;
 class UserInput;
 using keyFunction = std::function<void(actions, keys)>;

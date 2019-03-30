@@ -10,14 +10,6 @@ glm::mat4 Object::calcModel() const
 		model = glm::scale(model, scalers);
 	return model;
 }
-
-void Object::obj_init()
-{
-	pos = glm::vec3(0);
-	scalers = glm::vec3(0);
-	rotationalAxis = glm::vec3(0);
-}
-
 void Object::setPos(glm::vec3 pos)
 {
 	this->pos = pos;
@@ -42,4 +34,7 @@ glm::vec3 Object::getPos() const
 void Object::setShininess(float s) 
 {
 	shininess = s;
+}
+Object::Object() : pos(glm::vec3(0)), scalers(glm::vec3(0)), rotationalAxis(glm::vec3(0)), shininess(1), angle(0), instanced(false)
+{
 }

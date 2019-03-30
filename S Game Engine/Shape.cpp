@@ -32,7 +32,6 @@ void Cube::draw(const Shader * s) const
 
 Shape::Shape() : tex(nullptr), color(glm::vec4(0))
 {
-	obj_init();
 }
 
 void Shape::setTexture(Texture * tex)

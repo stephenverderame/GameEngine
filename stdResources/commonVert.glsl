@@ -16,11 +16,12 @@ out mat3 Tan_To_World;
 void main(){
 	gl_Position = projection * view * model * vec4(pos, 1.0);
 	Tex_Coords = texCoords;
-	mat3 M_Inverse = mat3(transpose(inverse(model)));
-	Normal = M_Inverse * normal;
-	vec3 t = normalize(vec3(model * vec4(tangent, 0.0)));
-	vec3 b = normalize(vec3(model * vec4(cross(normal, tangent), 0.0)));
-	vec3 n = normalize(vec3(model * vec4(normal, 0.0)));
+	mat3 M_Inverse = transpose(inverse(mat3(model)));
+	Normal = normalize(M_Inverse * normal);
+	vec3 t = normalize(M_Inverse * tangent);
+	vec3 n = Normal;
+	t = normalize(t - dot(t, n) * n);
+	vec3 b = cross(n, t);
 	Tan_To_World = mat3(t, b, n);
 	Frag_Pos = vec3(model * vec4(pos, 1.0));
 }

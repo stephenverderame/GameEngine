@@ -13,7 +13,7 @@
 #endif
 #endif
 
-#define STD_SHADER_COUNT 3
+#define STD_SHADER_COUNT 4
 #define SHADER 5787
 #define COMMON_VERT 10
 #define COMMON_FRAG 11
@@ -21,3 +21,4 @@
 #define MODEL_FRAG 13
 #define SKY_VERT 14
 #define SKY_FRAG 15
+#define INSTANCE_VERT 16

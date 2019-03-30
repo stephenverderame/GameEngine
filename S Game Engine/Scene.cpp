@@ -20,14 +20,14 @@ void Scene::addObj(Object * o, const char * name)
 {
 	pimpl->nameTable.insert(std::pair<std::string, size_t>(name, pimpl->objects.size()));
 	pimpl->objects.push_back(o);
-	pimpl->objectDataList.push_back({ objectType::simple });	
+	pimpl->objectDataList.push_back({ objectType::simple, o->instancingEnabled() });	
 }
 
 void Scene::addObj(AnimModel * m, const char * name)
 {
 	pimpl->nameTable.insert(std::pair<std::string, size_t>(name, pimpl->objects.size()));
 	pimpl->objects.push_back(m);
-	pimpl->objectDataList.push_back({ objectType::model });
+	pimpl->objectDataList.push_back({ objectType::model, m->instancingEnabled() });
 }
 void Scene::addLight(light * light) 
 {
@@ -66,7 +66,7 @@ void Scene::uploadLights(Shader * s) const
 	}
 	if (pimpl->directionalLight != nullptr) {
 		s->setBool("useDirectional", true);
-		s->setVec3("directional.direction", pimpl->directionalLight->direction);
+		s->setVec3("directional.position", pimpl->directionalLight->position);
 		s->setVec3("directional.color", pimpl->directionalLight->color);
 		s->setFloat("directional.ambientFactor", pimpl->directionalLight->ambientFactor);
 		s->setFloat("directional.specularFactor", pimpl->directionalLight->specularFactor);

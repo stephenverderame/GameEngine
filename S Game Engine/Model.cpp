@@ -48,16 +48,16 @@ Mesh * Model::processMesh(void * ai_mesh, const void * _scene)
 			indices.push_back(face.mIndices[j]);
 	}
 	aiMaterial * material = scene->mMaterials[mesh->mMaterialIndex];
-	auto diffuseList = loadMaterialTexture(material, aiTextureType_DIFFUSE, "t_diffuse");
-	auto specList = loadMaterialTexture(material, aiTextureType_SPECULAR, "t_specular");
-	auto normList = loadMaterialTexture(material, aiTextureType_HEIGHT, "t_normal");
+	auto diffuseList = loadMaterialTexture(material, aiTextureType_DIFFUSE);
+	auto specList = loadMaterialTexture(material, aiTextureType_SPECULAR);
+	auto normList = loadMaterialTexture(material, aiTextureType_HEIGHT);
 	textures.insert(textures.end(), diffuseList.begin(), diffuseList.end());
 	textures.insert(textures.end(), specList.begin(), specList.end());
 	textures.insert(textures.end(), normList.begin(), normList.end());
-	return new Mesh(vertices, indices, textures);
+	return new Mesh(vertices, indices, textures, ibo, maxInstances);
 }
 
-std::vector<Texture*> Model::loadMaterialTexture(void * material, int type, const char * name)
+std::vector<Texture*> Model::loadMaterialTexture(void * material, int type)
 {
 	aiMaterial * mat = reinterpret_cast<aiMaterial*>(material);
 	aiTextureType t = (aiTextureType)type;
@@ -118,12 +118,34 @@ Model::Model(int resourceId, int resourceType)
 	const aiScene * scene = importer.ReadFileFromMemory(res.data, res.length, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
 	loadModel(scene);
 }
+Model::Model(const char * path, std::vector<glm::mat4> & instanceTransforms, const char * texDirectory)
+{
+	instanced = true;
+	glGenBuffers(1, &ibo);
+	glBindBuffer(GL_ARRAY_BUFFER, ibo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * instanceTransforms.size(), instanceTransforms.data(), GL_DYNAMIC_DRAW);
+	instanceMap = glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
+	maxInstances = instanceTransforms.size();
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	if (texDirectory != nullptr)
+		this->texDirectory = texDirectory;
+	else {
+		std::string pr = path;
+		this->texDirectory = pr.substr(0, pr.find_last_of('\\'));
+	}
+	Assimp::Importer importer;
+	const aiScene * scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
+	loadModel(scene);
+}
 
 
 Model::~Model()
 {
 	for (Mesh * m : meshes)
 		delete m;
+	if (ibo != nullbuf) {
+		glDeleteBuffers(1, &ibo);
+	}
 }
 
 void Model::draw(const Shader * s) const
@@ -131,13 +153,17 @@ void Model::draw(const Shader * s) const
 	//Shader is used in Engine code
 	s->setMat4("model", calcModel());
 	s->setFloat("shininess", shininess);
-	s->setBool("useSpecMap", true);
 	for (Mesh * m : meshes)
 		m->draw(s);
-	s->setBool("useSpecMap", false);
+}
+bool Model::updateInstance(unsigned int index, glm::mat4 & mat) {
+	assert(index < maxInstances && "Index out of bounds!");
+	if (ibo == nullbuf) return false;
+	memcpy((glm::mat4*)instanceMap + index, glm::value_ptr(mat), sizeof(glm::mat4));
+	return true;
 }
 
-Mesh::Mesh(std::vector<vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures) : indices(indices), textures(textures)
+Mesh::Mesh(std::vector<vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture*> textures, unsigned int ibo, unsigned int instances) : indices(indices), textures(textures), ibo(ibo), instances(instances)
 {
 	glGenVertexArrays(1, &vao);
 	glGenBuffers(1, &vbo);
@@ -155,6 +181,12 @@ Mesh::Mesh(std::vector<vertex> vertices, std::vector<unsigned int> indices, std:
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)offsetof(vertex, tangent));
 	glEnableVertexAttribArray(3);
+	if (ibo != nullbuf) {
+		glBindBuffer(GL_ARRAY_BUFFER, ibo);
+		glVertexAttribPointer(4, 16, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), 0);
+		glEnableVertexAttribArray(4);
+		glVertexAttribDivisor(4, 1);
+	}
 
 }
 
@@ -193,9 +225,12 @@ void Mesh::draw(const Shader * s) const
 		textures[i]->bind();
 	}
 	if (normCount) s->setBool("useNormalMap", true);
+	if (specCount) s->setBool("useSpecMap", true);
 	glBindVertexArray(vao);
-	glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, 0);
+	if(ibo == nullbuf) glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, 0);
+	else glDrawElementsInstanced(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, 0, instances);
 	if (normCount) s->setBool("useNormalMap", false);
+	if (specCount) s->setBool("useSpecMap", false);
 
 }
 

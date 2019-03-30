@@ -3,7 +3,8 @@
 enum shader_types {
 	st_common,
 	st_model,
-	st_skybox
+	st_skybox,
+	st_instance
 };
 
 int Engine::pickShader(objData d)
@@ -12,7 +13,7 @@ int Engine::pickShader(objData d)
 	case objectType::model:
 			return st_model;
 	default:
-		return st_common;
+		return d.instance ? st_instance : st_common;
 	}
 }
 
@@ -75,11 +76,16 @@ Engine::Engine()
 	shaders[st_common] = new Shader(resources, COMMON_VERT, COMMON_FRAG);
 	shaders[st_model] = new Shader(resources, MODEL_VERT, MODEL_FRAG);
 	shaders[st_skybox] = new Shader(resources, SKY_VERT, SKY_FRAG);
+	shaders[st_instance] = new Shader(resources, INSTANCE_VERT, COMMON_FRAG);
 	memset(perspectiveData, 0, sizeof(perspectiveData));
 	shaders[st_common]->use();
 	shaders[st_common]->setInt("texture_diffuse", DIFFUSE_TEX_ID);
 	shaders[st_common]->setInt("texture_specular", SPECULAR_TEX_ID);
 	shaders[st_common]->setInt("texture_normal", NORMAL_TEX_ID);
+	shaders[st_instance]->use();
+	shaders[st_instance]->setInt("texture_diffuse", DIFFUSE_TEX_ID);
+	shaders[st_instance]->setInt("texture_specular", SPECULAR_TEX_ID);
+	shaders[st_instance]->setInt("texture_normal", NORMAL_TEX_ID);
 	shaders[st_skybox]->use();
 	shaders[st_skybox]->setInt("texture_skybox", 0);
 
@@ -90,5 +96,14 @@ Engine::~Engine()
 {
 	for (Shader * s : shaders)
 		delete s;
+}
+
+glm::mat4 Engine::makeTransformation(glm::vec3 pos, float scale, float rotation, glm::vec3 rotationAxis) 
+{
+	glm::mat4 model;
+	model = glm::translate(model, pos);
+	model = glm::scale(model, glm::vec3(scale));
+	model = glm::rotate(model, rotation, rotationAxis);
+	return model;
 }
 
